@@ -1,24 +1,10 @@
 #include "pri.h"
 
-int	ft_printf(const char *format, ...)
+int	print_format(va_list ap, const char *format, t_arg_info *tab_args_infos)
 {
-	va_list		ap;
-	t_arg_infs	*tab;
-	int		count;
-	int		i;
-	int		arg_position;
-	int		int_x;
-	double		double_x;
-	long int	longint_x;
-	long double	longdouble_x;
-	long long int	longlongint_x;
-	long long double	longlongdouble_x;
+	int		arg_index;
 
-
-	count = ft_analyse_format(format, t_arg_infs **tab);//return 0 if success, -1if error
-	if (count == -1)
-		return (-1);
-	va_start(format, ap);
+	arg_index = 0;
 	while (format[i])
 	{
 		if (format[i] != '%' || format[i] == '%' && format[i + 1] != '%')
@@ -28,45 +14,32 @@ int	ft_printf(const char *format, ...)
 		}
 		else
 		{
-			if (is_numeric_conv(tab[arg_position].type))
-			{
-				x = va_arg(ap, int);
-				tab[arg_position].fct();
-			}
-			if (is_longnumeric_conv(tab[arg_position].type))
-			{
-				x = va_arg(ap, int);
-				tab[arg_position].fct();
-			}
-			if (is_longlongnumeric_conv(tab[arg_position].type))
-			{
-				x = va_arg(ap, int);
-				tab[arg_position].fct();
-			}
-			if (is_decimal_conv(tab[arg_position].type))
-			{
-				x = va_arg(ap, int);
-				tab[arg_position].fct();
-			}
-			if (is_longdecimal_conv(tab[arg_position].type))
-			{
-				x = va_arg(ap, int);
-				tab[arg_position].fct();
-			}
-			if (is_longlongdecimal_conv(tab[arg_position].type))
-			{
-				x = va_arg(ap, int);
-				tab[arg_position].fct();
-			}
+			tab_args_infos[arg_index].fct(ap, tab_args_infos.stat_of_print);
 			while (!is_alpha(format[i]))
 				i++;
 			if (format[i] == l || format[i] == ll || format[i] == h\
 			|| format[i] == hh || format[i] == L)
 				i++;
-			arg_position++;
+			arg_index++;
 		}
 		i++;
 	}
+	va_end(va);
+	return (count);
+}
+
+int	ft_printf(const char *format, ...)
+{
+	va_list		ap;
+	t_arg_infs	*tab;
+	int		count;
+	int		is_format_correct;
+
+	is_format_correct = parse_format(format, &tab_args_infos);
+	if (!is_format_correct)
+		return (-1);
+	va_start(format, ap);
+	count = print_format(ap, format, tab_args_infos);
 	va_end(va);
 	return (count);
 }
