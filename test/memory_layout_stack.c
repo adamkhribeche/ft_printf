@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   memory_layout_stack.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nkhribec <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 13:58:52 by nkhribec          #+#    #+#             */
+/*   Updated: 2019/09/15 14:15:38 by nkhribec         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 
 void ff(int n, int m, int n1, int m1)
@@ -15,25 +27,24 @@ void ff(int n, int m, int n1, int m1)
 	char buff[10000];
 	char c3;
 	
-	printf("n = %p\n", &n);
-	printf("m = %p\n", &m);
-	printf("n1 = %p\n", &n1);
-	printf("m1 = %p\n", &m1);
-	printf("a1 = %p\n", &a1);
-	printf("a2 = %p\n", &a2);
-	printf("a3 = %p\n", &a3);
-	printf("a4 = %p\n", &a4);
-	printf("c1 = %p\n", &c1);
-	printf("c2 = %p\n", &c2);
-	printf("c3 = %p\n", &c3);
-	printf("p1 = %p\n", &p1);
-	printf("p2 = %p\n", &p2);
-	printf("p2 = %p\n", &p3);
-	printf("p2 = %p\n", &p4);
-	printf("p3 = %p\n", &p3);
-	printf("buff0 = %p\n", &buff[0]);
-	printf("buff1 = %p\n", &buff[1]);
-	printf("buff2 = %p\n", &buff[2]);
+	printf("%p = n\n", &n);
+	printf("%p = m\n", &m);
+	printf("%p = n1\n", &n1);
+	printf("%p = m1\n", &m1);
+	printf("%p = a1\n", &a1);
+	printf("%p = a2\n", &a2);
+	printf("%p = a3\n", &a3);
+	printf("%p = a4\n", &a4);
+	printf("%p = c1\n", &c1);
+	printf("%p = c2\n", &c2);
+	printf("%p = c3\n", &c3);
+	printf("%p = p1\n", &p1);
+	printf("%p = p2\n", &p2);
+	printf("%p = p3\n", &p3);
+	printf("%p = p4\n", &p4);
+	printf("%p = buff0\n", &buff[0]);
+	printf("%p = buff1\n", &buff[1]);
+	printf("%p = buff2\n", &buff[2]);
 
 }
 
