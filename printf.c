@@ -2,55 +2,75 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdlib.h>
+
+
 //----------------------print_fct----------------------
-void af_int(void *p)
+void	af_int(void *p)
 {
 	int n = *(int *)p;
 	printf("%d\n", n);
 }
-void af_unsint(void *p)
+void	af_unsint(void *p)
 {
 	unsigned int n = *(unsigned int *)p;
 	printf("%u\n", n);
 }
-void af_char(void *p)
+void	af_char(void *p)
 {
 	char n = *(char *)p;
 	printf("%c\n", n);
 }
-void af_long(void *p)
+void	af_long(void *p)
 {
 	long n = *(long *)p;
 	printf("%ld\n", n);
 }
-void af_double(void *p)
+void	af_double(void *p)
 {
 	double n = *(double *)p;
 	printf("%lf\n", n);
 }
 //-----------------------is_fct-----------------------
-int is_intmax(char *s)
+int		is_intmax(char *s)
 {
 	return(!strcmp(s, "intmax"));
 }
-int is_double(char *s)
+int		is_double(char *s)
 {
 	return(!strcmp(s, "double"));
 }
-int is_float(char *s)
+int		is_float(char *s)
 {
 	return(!strcmp(s, "float"));
 }
-int is_str(char *s)
+int		is_str(char *s)
 {
 	return(!strcmp(s, "str"));
 }
 //------------------------get_arg-----------------------
-void get_args(va_list ap, char **tab, void **p, int index)
+int		get_args(const char *format, va_list ap, char **tab, void *arg_pointer)
 {
-	int i;
+	int		i;
+	int		index;
+	char	*percent_str;
+	int		nbr_of_percent;
+
 
 	i = 0;
+	index = 0;
+	nbr_of_percent = get_nbr_of_percent(format);
+	tab = malloc();
+	while (nbr_of_percent--)
+	{
+		percent_str = check_nth_percent(&format[i], index);//to manage $ we use static var in this fct
+		if (!percent_str)
+		{
+			free();
+			return (0);
+		}
+		get_data(percent_str, tab);
+		free(percent_str);
+	}
 	while (index--)
 	{
 		if (is_intmax(tab[i]))
@@ -65,16 +85,10 @@ void get_args(va_list ap, char **tab, void **p, int index)
 			*(double*)p[i] = va_arg(ap, double);
 			printf("------double------\n");
 		}
-		else if (is_float(tab[i]))
-		{
-			p[i] = malloc(sizeof(float));
-			*(float*)p[i] = va_arg(ap, double);
-			printf("------float------\n");
-		}
 		else if (is_str(tab[i]))
 		{
-			p[i] = malloc(sizeof(char) * 20);
-			p[i] = va_arg(ap, char *);
+			p[i] = va_arg(ap, char*);
+			p[i] = strsub((char*)p[i], 0, strlen((char*)p[i]));
 			printf("-----str------\n");
 		}
 		else
@@ -82,49 +96,39 @@ void get_args(va_list ap, char **tab, void **p, int index)
 		i++;
 	}
 }
-//---------------------------main_fct-------------------
-void ff(int n, ...)
+int		print_format(const char *format, t_infos_of_each_percent infos_of_each_percent, void **param_pointer)
 {
-	va_list ap;
-	int i;
-	char *tab[9] = {"intmax", "intmax", "intmax", "intmax", "intmax", "intmax", "double", "float", "str"};
-	void *p[9];
+	int		i;
+	int		count;
+
+	i = 0;
+	count = 0;
+	while (format[i])
+	{
+		i = print_from_to(format, i, '%');//don't include the %%
+		count = i;
+		count += g_dispatcher[get_handel_nbr(type)];//type it is a char*
+		i += len_of_specifier(format[i]);
+	}
+	return (count);
+}
+//---------------------------main_fct-------------------
+int		printf(const char *format, ...)
+{
+	va_list						ap;
+	t_infos_of_each_percent		*infos_of_each_percent;
+	char						**part_of_str
+	void						**param_pointer;
 
 	va_start(ap, n);
-	get_args(ap, tab, p, 9);
-	printf("%c\n", *(char*)p[0]);
-	printf("%hd\n", *(short int*)p[1]);
-	printf("%d\n", *(int*)p[2]);
-	printf("%lld\n", *(long long*)p[3]);
-	printf("%u\n", *(unsigned int*)p[4]);
-	printf("%ld\n", *(long*)p[5]);
-	printf("%lf\n", *(double*)p[6]);
-	printf("%f\n", *(float*)p[7]);
-	printf("%s\n", (char*)p[8]);
-	/*while (n > 0)
-	{
-		va_start(ap, n);
-		get(tab, p);
-		print(ap, n, tab);
-		printf("------88-----\n");
-		va_end(ap);
-		n--;	
-	}*/
+	get_args(format, ap, infos_of_each_percent, param_pointer);
+	count = print_format(format, infos_of_each_percent, parm_pointer);
 	va_end(ap);
+	return (count);
 }
 
 int main()
 {
-	char c = 65;
-	short sh = -5554;
-	int n = -455;
-	long long ll = 9123456458;
-	unsigned int u = 4054231569;
-	long l = 9999;
-	double d = 5412.2548;
-	float f = 54.326;
-	char *s = "adam khribeche";
-
-	//printf("%3$d , %1$d , %4$d , %2$.4d ", 1,255,3,4,5,6);
-	ff(6, c, sh, n, ll, u, l, d, f, s);
+	ft_printf("", );
+	return (0);
 }
