@@ -4,25 +4,55 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include "libft/libft.h"
 
-typedef struct		s_stat_of_print
+typedef struct		s_specifier
 {
-	int		flag_plus;
-	int		flag_minus;
-	int		flag_hash;
-	int		flag_space;
-	int		flag_zero;
-	int		width;
-	int		precision;
-}			t_stat_of_print;
+	char			*type;
+	char			*type_promoted;
+	int				dollar;
+}					t_specifier;
 
-typedef struct		s_arg_infs
+typedef struct		s_precision
 {
-	char		specifier;
-	t_stat_of_print	stat_of_print;
-	char		len;
-	void		(*fct)(va_list ap, t_stat_of_print stat_of_print);
-}			t_arg_infs;
+	int				state;
+	int				dollar;
+	int				asterisk;
+	void			*value;
+}					t_precision;
+
+typedef struct		s_width
+{
+	int				state;
+	int				dollar;
+	int				asterisk;
+	void			*value;
+}					t_width
+
+typedef struct		s_flags
+{
+	int				state;
+	int				plus;
+	int				minus;
+	int				space;
+	int				zero;
+	int				hash;
+}					t_flags;
+
+typedef struct		s_percent_infos
+{
+	t_specifier		specifier;
+	t_flags			flags;
+	t_width			width;
+	t_precision		precision;
+	t_dollar		dollar;
+}					t_percent_infos;
+
+typedef struct		s_data
+{
+	int				nbr_of_percent;
+	t_percent_infos	*tab_percent_infos;
+}					t_data;
 
 int	ft_printf(const char *format, ...);
 
